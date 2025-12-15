@@ -40,7 +40,15 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.compiler)
+    implementation(libs.coil)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.hilt)
+    implementation(libs.androidx.compose.navigation)
+    implementation(libs.hilt.android.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
