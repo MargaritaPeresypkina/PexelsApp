@@ -28,6 +28,9 @@ interface PhotoDao {
     @Query("DELETE FROM photos WHERE isBookmarked = 0")
     suspend fun cleanCache()
 
+    @Query("UPDATE photos SET isBookmarked =:isBookmarked WHERE id =:photoId ")
+    suspend fun updateBookmarked(photoId: Int, isBookmarked: Boolean)
+
     @Query("SELECT EXISTS(SELECT 1 FROM photos WHERE id = :photoId AND isBookmarked = 1)")
     suspend fun isBookmarked(photoId: Int): Boolean
 
