@@ -7,8 +7,9 @@ import com.example.pexelsapp.data.network.PexelsApi
 import com.example.pexelsapp.domain.entities.FeaturedCollection
 import com.example.pexelsapp.domain.entities.Photo
 import com.example.pexelsapp.domain.repository.PexelsRepository
+import javax.inject.Inject
 
-class PexelsRepositoryImpl(
+class PexelsRepositoryImpl @Inject constructor(
     val api: PexelsApi,
     val db: AppDatabase
 ): PexelsRepository  {
