@@ -17,8 +17,8 @@ import com.example.pexelsapp.data.db.entities.PhotoEntity
     exportSchema = false
 )
 abstract class AppDatabase: RoomDatabase() {
-    abstract class photoDao: PhotoDao
-    abstract class featuredCollectionDao: FeaturedCollectionDao
+    abstract fun photoDao(): PhotoDao
+    abstract fun featuredCollectionDao(): FeaturedCollectionDao
 
     companion object{
         @Volatile
