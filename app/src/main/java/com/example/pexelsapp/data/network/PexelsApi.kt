@@ -25,4 +25,11 @@ interface PexelsApi {
     suspend fun getPhotoDetails(
         @Path("id") photoId: Int
     ): PhotoDto
+
+    @GET("v1/search")
+    suspend fun searchPhotos(
+        @Query("query") query: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): CuratedPhotosResponse
 }

@@ -10,4 +10,5 @@ interface PexelsRepository {
     suspend fun getBookmarks(): List<Photo>
     suspend fun addBookmark(photo: Photo)
     suspend fun removeBookmark(photo: Photo)
+    suspend fun searchPhotos(query: String, page: Int, perPage: Int): List<Photo>
 }

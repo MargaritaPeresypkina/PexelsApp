@@ -56,4 +56,16 @@ class PexelsRepositoryImpl @Inject constructor(
     override suspend fun addBookmark(photo: Photo) = photoDao.insertPhoto(photo.toEntity().copy(isBookmarked = true))
 
     override suspend fun removeBookmark(photo: Photo) = photoDao.updateBookmarked(photo.id, false)
+
+    override suspend fun searchPhotos(query: String, page: Int, perPage: Int): List<Photo> {
+        return try {
+            val response = api.searchPhotos(query, page, perPage)
+            val photos = response.photos.map { it.toDomain() }
+            photoDao.insertAllPhotos(photos.map { it.toEntity() })
+            photos
+        } catch(e: Exception) {
+            photoDao.getAllPhotos().map { it.toDomain() }
+        }
+    }
+
 }

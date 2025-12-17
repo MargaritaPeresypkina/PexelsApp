@@ -21,12 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.pexelsapp.R
+import com.example.pexelsapp.ui.theme.Red
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -85,7 +84,7 @@ fun BottomNavigationBar(
                                         .width(24.dp)
                                         .height(2.dp)
                                         .clip(RoundedCornerShape(10.dp))
-                                        .background(colorResource(R.color.red))
+                                        .background(Red)
                                 )
                             }
 
