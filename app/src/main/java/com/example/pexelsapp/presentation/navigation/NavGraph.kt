@@ -88,7 +88,8 @@ fun NavGraph() {
                 BookmarksScreen(
                     onPhotoClick = { id ->
                         navController.navigate("details/$id")
-                    }
+                    },
+                    navController = navController
                 )
             }
 

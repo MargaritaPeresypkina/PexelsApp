@@ -45,8 +45,10 @@ class PexelsRepositoryImpl @Inject constructor(
 
     override suspend fun getPhotoDetails(photoId: Int): Photo? {
         return try {
-            api.getPhotoDetails(photoId).toDomain()
-        } catch (e: Exception){
+            val photo = api.getPhotoDetails(photoId).toDomain()
+            photoDao.insertPhoto(photo.toEntity())
+            photo
+        } catch (e: Exception) {
             photoDao.getPhotoById(photoId)?.toDomain()
         }
     }
