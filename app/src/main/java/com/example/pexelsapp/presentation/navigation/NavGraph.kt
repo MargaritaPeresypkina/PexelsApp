@@ -11,6 +11,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,8 +20,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import androidx.compose.runtime.getValue
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.pexelsapp.presentation.bookmarks.BookmarksScreen
 import com.example.pexelsapp.presentation.details.DetailsScreen
+import com.example.pexelsapp.presentation.details.DetailsViewModel
 import com.example.pexelsapp.presentation.home.HomeScreen
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -106,9 +109,18 @@ fun NavGraph() {
                         animationSpec = tween(400)
                     ) + fadeOut()
                 }
-            ) {
+            )
+             { backStackEntry ->
+                val id = backStackEntry.arguments?.getInt("id") ?: 0
+                val viewModel: DetailsViewModel = hiltViewModel()
+                LaunchedEffect(id) { viewModel.loadPhoto(id) }
+
                 DetailsScreen(
-                    onBack = { navController.popBackStack() }
+                    viewModel = viewModel,
+                    onBack = { navController.popBackStack() },
+                    onDownload = { photo ->
+                        // скачивание
+                    }
                 )
             }
         }
