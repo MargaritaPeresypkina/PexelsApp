@@ -10,6 +10,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.example.pexelsapp.R
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -41,6 +43,7 @@ fun HomeScreen(
     onPhotoClick: (Int) -> Unit
 ) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+    var hasSearched by remember { mutableStateOf(false) }
 
     val featuredCollections by viewModel.featuredCollections.collectAsState()
     val photos by viewModel.curatedPhotos.collectAsState()
@@ -58,6 +61,7 @@ fun HomeScreen(
             value = searchQuery,
             onValueChange = {
                 searchQuery = it
+                if (it.text.isNotEmpty()) hasSearched = true
                 viewModel.onSearchQueryChanged(it.text)
             },
             placeholder = {
@@ -101,6 +105,7 @@ fun HomeScreen(
                             .padding(end = 20.dp, top = 18.dp, bottom = 18.dp)
                             .clickable {
                                 searchQuery = TextFieldValue("")
+                                hasSearched = false
                                 viewModel.clearSearch()
                             },
                         tint = DarkGrey
@@ -143,6 +148,7 @@ fun HomeScreen(
                         .background(backgroundColor)
                         .clickable {
                             searchQuery = TextFieldValue(collection.title)
+                            hasSearched = true
                             viewModel.onCollectionClicked(collection)
                         }
                         .padding(horizontal = 20.dp, vertical = 10.dp)
@@ -173,19 +179,51 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        AnimatedContent(
-            targetState = photos,
-            transitionSpec = {
-                fadeIn(animationSpec = tween(300)) togetherWith
-                        fadeOut(animationSpec = tween(200))
-            },
-            label = "Photos animation"
-        ) { animatedPhotos ->
-            MasonryGrid(
-                photos = animatedPhotos,
-                columns = 2,
-                onPhotoClick = onPhotoClick
-            )
+        if (hasSearched && photos.isEmpty() && !isLoading) {
+            // Заглушка AC5
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "No results found",
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily(Font(R.font.mulish_latin_500_normal)),
+                    color = Color(0xFF333333)
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Text(
+                    modifier = Modifier
+                        .clickable{
+                            searchQuery = TextFieldValue("")
+                            hasSearched = false
+                            viewModel.loadCuratedPhotos()
+                        },
+                    text = "Explore",
+                    fontFamily = FontFamily(Font(R.font.mulish_latin_700_normal)),
+                    color = Red,
+                    fontSize = 18.sp
+                )
+            }
+
+        } else {
+            AnimatedContent(
+                targetState = photos,
+                transitionSpec = {
+                    fadeIn(animationSpec = tween(300)) togetherWith
+                            fadeOut(animationSpec = tween(200))
+                },
+                label = "Photos animation"
+            ) { animatedPhotos ->
+                MasonryGrid(
+                    photos = animatedPhotos,
+                    columns = 2,
+                    onPhotoClick = onPhotoClick
+                )
+            }
         }
     }
 }
